@@ -16,7 +16,7 @@ def check_strike_ball(candidate,check_num):
     return strike, ball
 
 
-for num in range(100,1000):
+for num in range(1000):
     str_num = str(num).zfill(3)
 
     if len(set(str_num))<3 or "0" in set(str_num):
