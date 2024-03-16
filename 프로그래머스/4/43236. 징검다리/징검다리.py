@@ -1,28 +1,23 @@
 def solution(distance, rocks, n):
-    answer = 0
-    rocks = sorted(rocks)
+    rocks = sorted(rocks)+[distance]
     
-    start = 1
-    end = distance
+    start,end = 1,distance+1
     
-    while start<=end:
+    while start<end:
         mid = (start+end)//2
         
-        rock_count = 0
-        now_point = mid
-        for rock in rocks:
-            if now_point<=rock:
-                now_point = rock+mid
-                rock_count+=1
+        output = 0
+        before_point = 0
+        
+        for d in rocks:
+            if d-before_point>=mid:
+                before_point=d
             else:
-                continue
-        if now_point>distance: # 제일 끝에 돌을 제거해야함.
-            rock_count-=1
-                
-        if rock_count>=len(rocks)-n:
-            start=mid+1
-            answer=mid
+                output+=1
+        
+        if output<=n:
+            start = mid+1
         else:
-            end=mid-1
-    
-    return answer
+            end = mid
+            
+    return start-1
