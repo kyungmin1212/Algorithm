@@ -2,54 +2,21 @@ import sys
 
 input = sys.stdin.readline
 
-n = int(input())
+n = int(input())  # 막대의 개수
+histogram = [int(input()) for _ in range(n)] + [0]  # 끝 처리를 위해 0 추가
+stack = []  # 인덱스를 저장할 스택
+max_area = 0  # 최대 넓이 저장
 
-arr = [int(input()) for _ in range(n)]
+for i, height in enumerate(histogram):
+    # 스택이 비어있지 않고, 현재 막대의 높이가 스택의 top에 있는 막대의 높이보다 낮은 경우
+    while stack and histogram[stack[-1]] > height:
+        # 스택에서 막대를 팝하고, 해당 막대의 높이로 만들 수 있는 최대 넓이를 계산
+        top = stack.pop()
+        # 스택이 비어있지 않으면 현재 인덱스에서 스택 top 인덱스까지의 거리를 너비로 사용
+        width = i if not stack else i - stack[-1] - 1
+        # 최대 넓이 업데이트
+        max_area = max(max_area, histogram[top] * width)
+    # 현재 막대의 인덱스를 스택에 푸시
+    stack.append(i)
 
-def find(start,end):
-    global answer
-    if start>end:
-        return
-    mid = (start+end)//2
-    left = mid-1
-    right = mid+1
-    
-    min_height = arr[mid]
-    count = 1
-    answer = max(answer,min_height)
-    while True:
-        count+=1
-        if left<start and right>end:
-            break
-        
-        elif left<start: # 오른쪽으로만 이동가능
-            right_height = min(min_height,arr[right])
-            right+=1
-            min_height = right_height
-            answer = max(answer,min_height*count)
-            
-        elif right>end: # 왼쪽으로만 이동 가능
-            left_height = min(min_height,arr[left])
-            left-=1
-            min_height = left_height
-            answer = max(answer,min_height*count)
-            
-        else: # 양쪽으로 이동가능
-            left_height = min(min_height,arr[left])
-            right_height = min(min_height,arr[right])
-            
-            if left_height>=right_height:
-                left-=1
-                min_height = left_height
-                answer = max(answer,min_height*count)
-            else:
-                right+=1
-                min_height = right_height
-                answer = max(answer,min_height*count)
-    if start!=end:
-        find(start,mid-1)
-        find(mid+1,end)
-        
-answer = 0
-find(0,n-1)
-print(answer)
+print(max_area)
