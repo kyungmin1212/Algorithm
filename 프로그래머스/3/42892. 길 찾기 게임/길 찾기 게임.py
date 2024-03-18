@@ -2,57 +2,46 @@ import sys
 
 sys.setrecursionlimit(int(1e5))
 
-class TreeNode:
-    def __init__(self, item):
-        self.x = item[0]
-        self.y = item[1]
-        self.id = item[2]
-        self.left = None
-        self.right = None
+class Node():
+    def __init__(self,idx,x,left=None,right=None):
+        self.idx = idx
+        self.x = x
+        self.left = left
+        self.right = right
+        
+def preorder(root,answer):
+    if root:
+        answer.append(root.idx)
+        preorder(root.left,answer)
+        preorder(root.right,answer)
+    return answer
 
-def add_node(parent, child):
-    if child.x < parent.x:
-        if parent.left is None:
-            parent.left = child
+def postorder(root,answer):
+    if root:
+        postorder(root.left,answer)
+        postorder(root.right,answer)
+        answer.append(root.idx)
+    return answer
+
+def add_node(parent,x,idx):
+    if parent.x<x:
+        if parent.right:
+            add_node(parent.right,x,idx)
         else:
-            add_node(parent.left, child)
+            parent.right=Node(idx,x)
     else:
-        if parent.right is None:
-            parent.right = child
+        if parent.left:
+            add_node(parent.left,x,idx)
         else:
-            add_node(parent.right, child)
-
-def preorder_traversal(node, result):
-    if node is None:
-        return
-    result.append(node.id)
-    preorder_traversal(node.left, result)
-    preorder_traversal(node.right, result)
-
-def postorder_traversal(node, result):
-    if node is None:
-        return
-    postorder_traversal(node.left, result)
-    postorder_traversal(node.right, result)
-    result.append(node.id)
-
+            parent.left=Node(idx,x)
+        
+        
+        
 def solution(nodeinfo):
-    # 각 노드에 id 추가
-    for i, info in enumerate(nodeinfo):
-        info.append(i + 1)
-    
-    # y좌표에 따라 내림차순, x좌표에 따라 오름차순으로 노드 정렬
-    nodes = sorted(nodeinfo, key=lambda x: (-x[1], x[0]))
-    
-    # 트리 구성
-    root = TreeNode(nodes[0])
-    for node in nodes[1:]:
-        add_node(root, TreeNode(node))
-    
-    # 순회
-    preorder_result = []
-    postorder_result = []
-    preorder_traversal(root, preorder_result)
-    postorder_traversal(root, postorder_result)
-    
-    return [preorder_result, postorder_result]
+    index_nodeinfo = [[i+1,x,y] for i,(x,y) in enumerate(nodeinfo)]
+    index_nodeinfo.sort(key=lambda x : -x[2])
+    root = Node(idx = index_nodeinfo[0][0], x=index_nodeinfo[0][1])
+    for idx,x,y in index_nodeinfo[1:]:
+        add_node(root,x,idx)
+        
+    return [preorder(root,[]),postorder(root,[])]
