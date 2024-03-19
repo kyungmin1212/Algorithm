@@ -21,10 +21,15 @@ def solution(heights):
 
     # 인접한 높이 차이를 계산합니다.
     arr.append(arr[0])  # 배열의 처음과 끝을 연결하기 위해
-    diff = [abs(arr[j] - arr[j+1]) for j in range(len(arr)-1)]
+    diff = [abs(arr[j] - arr[j + 1]) for j in range(len(arr) - 1)]
 
     # 높이 차이 배열을 정렬합니다.
     diff.sort()
     answer = diff[0] if len(diff) == 1 else diff[1]
 
     return answer
+
+
+# 테스트
+heights = [1, 4, 5, 6, 9]
+print(solution(heights))
