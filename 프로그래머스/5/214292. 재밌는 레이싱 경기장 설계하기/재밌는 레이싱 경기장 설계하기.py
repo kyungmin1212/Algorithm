@@ -12,6 +12,7 @@ def solution(heights):
         for i in range(n_heights-1):
             diff.append(abs(new_arr[i+1]-new_arr[i]))
         diff.sort()
+        
         return diff[0]
     else:
         new_arr=[]
@@ -25,4 +26,5 @@ def solution(heights):
         for i in range(len(new_arr)-1):
             diff.append(abs(new_arr[i+1]-new_arr[i]))
         diff.sort()
+        
         return diff[1] 
