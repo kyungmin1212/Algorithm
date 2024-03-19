@@ -1,39 +1,28 @@
 def solution(heights):
-    # 높이 배열을 정렬합니다.
     heights.sort()
-    total_len = len(heights)
-    n = total_len // 2
-    is_odd = total_len % 2
-
-    # 재배치된 배열을 준비합니다.
-    arr = []
-
-    # 홀수와 짝수 길이에 따라 다른 재배치 방식을 적용합니다.
-    if is_odd:
-        for i in range(n):
-            arr.append(heights[i])
-            arr.append(heights[n + is_odd + i])
-        arr.append(heights[n])
-        # 인접한 높이 차이를 계산합니다.
-        arr.append(arr[0])  # 배열의 처음과 끝을 연결하기 위해
-        diff = [abs(arr[j] - arr[j + 1]) for j in range(len(arr) - 1)]
-        diff.sort()
-        answer = diff[0] if len(diff) == 1 else diff[1]
-    else:
-        for i in range(n):
-            arr.append(heights[n + is_odd + i])
-            arr.append(heights[i])
-        diff = [abs(arr[j] - arr[j + 1]) for j in range(len(arr) - 1)]
-        diff.sort()
-        answer = diff[0]
-
-
-    # 높이 차이 배열을 정렬합니다.
     
-
-    return answer
-
-
-# 테스트
-heights = [1, 4, 5, 6, 9]
-print(solution(heights))
+    n_heights = len(heights)
+    if n_heights%2==0: # 짝수개 인경우
+        new_arr=[]
+        for i in range(n_heights//2):
+            new_arr.append(heights[n_heights//2+i])
+            new_arr.append(heights[i])
+        
+        diff = []
+        for i in range(n_heights-1):
+            diff.append(abs(new_arr[i+1]-new_arr[i]))
+        diff.sort()
+        return diff[0]
+    else:
+        new_arr=[]
+        for i in range(n_heights//2):
+            new_arr.append(heights[i])
+            new_arr.append(heights[n_heights//2+1+i])
+        new_arr.append(heights[n_heights//2])
+        new_arr.append(heights[0]) # 제일 작은 값을 찾기 위함.
+        
+        diff = []
+        for i in range(len(new_arr)-1):
+            diff.append(abs(new_arr[i+1]-new_arr[i]))
+        diff.sort()
+        return diff[1] 
