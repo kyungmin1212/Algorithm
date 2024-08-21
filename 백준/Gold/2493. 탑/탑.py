@@ -1,24 +1,21 @@
-import sys
-
-input = sys.stdin.readline
-
 n = int(input())
 
-arr = list(map(int, input().split()))
+top = list(map(int, input().split()))
+
 stack = []
 answer = []
-for idx, item in enumerate(arr):
+
+for idx, item in enumerate(top, 1):
     while stack:
-        if stack[-1][0] < item:
+        if stack[-1][1] < item:
             stack.pop()
         else:
             break
 
     if stack:
-        answer.append(stack[-1][1])
+        answer.append(stack[-1][0])
     else:
         answer.append(0)
-
-    stack.append((item, idx + 1))
+    stack.append((idx, item))
 
 print(*answer)
